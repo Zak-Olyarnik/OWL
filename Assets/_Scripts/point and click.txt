@@ -1,0 +1,21 @@
+// set target to new mouse click position
+			if(Input.GetButton("Fire1"))
+			{
+				//movement = new Vector2(0f, 0f);
+				target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+				target.z = 0f;
+				movement = (target - transform.position).normalized;
+			}
+
+			// set sprite to face direction of movement
+			if (movement.magnitude > 0)
+			{
+				rotAngle = Mathf.Atan2(movement.y, movement.x) * Mathf.Rad2Deg;
+				transform.rotation = Quaternion.AngleAxis(rotAngle, Vector3.forward);
+			}
+
+			// finally move
+			transform.position = Vector3.MoveTowards(transform.position, target, Time.deltaTime * speed);
+			if (Vector3.Distance(transform.position, target) < .1f)	// stop when very close to target
+			{ movement = new Vector2(0f, 0f); }
+			anim.SetFloat("movement", movement.magnitude);
